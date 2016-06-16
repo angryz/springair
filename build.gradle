@@ -1,0 +1,46 @@
+allprojects {
+    group 'info.noconfuse'
+    version '1.0'
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'maven'
+
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+
+    ext {
+        springVersion = '4.2.6.RELEASE'
+        slf4jVersion = '1.7.21'
+        junitVersion = '4.11'
+        [compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        all*.exclude module: 'commons-logging'
+    }
+
+    dependencies {
+        compile(
+                // Logging
+                "org.slf4j:slf4j-api:${slf4jVersion}",
+                "org.slf4j:slf4j-log4j12:${slf4jVersion}",
+                //"org.slf4j:slf4j-simple:${slf4jVersion}",
+                "org.slf4j:jul-to-slf4j:${slf4jVersion}",
+                "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
+        )
+        compile(
+                // Tools
+                'org.apache.commons:commons-lang3:3.4',
+                'org.apache.commons:commons-collections4:4.1'
+        )
+        testCompile(
+                "junit:junit:${junitVersion}",
+        )
+    }
+
+}

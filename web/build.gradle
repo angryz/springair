@@ -1,0 +1,12 @@
+version '1.0'
+jar.archiveName "${rootProject.name}-web-${version}.jar"
+
+dependencies {
+    compile "org.springframework:spring-web:${springVersion}"
+
+    // serialization
+    compile('com.fasterxml.jackson.core:jackson-core:2.7.3',
+            'com.fasterxml.jackson.core:jackson-databind:2.7.3')
+
+    testCompile "org.springframework:spring-test:${springVersion}"
+}
