@@ -2,11 +2,19 @@ version '1.0'
 jar.archiveName "${rootProject.name}-web-${version}.jar"
 
 dependencies {
-    compile "org.springframework:spring-web:${springVersion}"
+    compile(
+            "org.springframework:spring-web:${springVersion}",
+            "org.springframework:spring-webmvc:${springVersion}"
+    )
 
     // serialization
-    compile('com.fasterxml.jackson.core:jackson-core:2.7.3',
-            'com.fasterxml.jackson.core:jackson-databind:2.7.3')
+    compile(
+            'com.fasterxml.jackson.core:jackson-core:2.7.3',
+            'com.fasterxml.jackson.core:jackson-databind:2.7.3'
+    )
 
-    testCompile "org.springframework:spring-test:${springVersion}"
+    testCompile(
+            "org.springframework:spring-test:${springVersion}",
+            'javax.servlet:javax.servlet-api:3.0.1'
+    )
 }
