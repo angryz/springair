@@ -1,0 +1,12 @@
+version '1.0'
+jar.archiveName "${rootProject.name}-caching-${version}.jar"
+
+dependencies {
+    compile(
+            "org.springframework:spring-context:${springVersion}"
+    )
+
+    testCompile(
+            "org.springframework:spring-test:${springVersion}"
+    )
+}
