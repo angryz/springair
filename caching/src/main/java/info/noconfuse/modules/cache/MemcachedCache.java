@@ -107,7 +107,7 @@ public class MemcachedCache implements Cache {
      */
     protected void save(String key, Object value) {
         try {
-            memcachedClient.set(genKey(key), 0, value);
+            memcachedClient.set(key, 0, value);
         } catch (TimeoutException e) {
             LOGGER.error("Timeout when caching data for key:{}", key, e);
         } catch (InterruptedException e) {
@@ -122,7 +122,7 @@ public class MemcachedCache implements Cache {
      */
     protected void delete(String key) {
         try {
-            memcachedClient.delete(genKey(key));
+            memcachedClient.delete(key);
         } catch (TimeoutException e) {
             LOGGER.error("Timeout when deleting data for key:{}", key, e);
         } catch (InterruptedException e) {
