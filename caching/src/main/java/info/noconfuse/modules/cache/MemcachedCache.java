@@ -21,26 +21,15 @@ public class MemcachedCache implements Cache {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MemcachedCache.class);
 
-    protected static final String DEFAULT_CACHE_PREFIX = "cached_";
-
     private String name;
 
     private MemcachedClient memcachedClient;
 
-    private String prefix;
-
     public MemcachedCache(String name, MemcachedClient memcachedClient) {
-        this(name, memcachedClient, DEFAULT_CACHE_PREFIX);
-    }
-
-    public MemcachedCache(String name, MemcachedClient memcachedClient, String prefix) {
-        Assert.notNull(name, "Cache name must not be null");
-        Assert.notNull(memcachedClient, "MemcachedClient must not be null");
-        if (prefix == null)
-            LOGGER.warn("Prefix of Cache not assigned, use default \'{}\' instead.", DEFAULT_CACHE_PREFIX);
+        Assert.notNull(name, "Cache name must be assigned");
+        Assert.notNull(memcachedClient, "MemcachedClient must be assigned");
         this.name = name;
         this.memcachedClient = memcachedClient;
-        this.prefix = prefix;
     }
 
     @Override
@@ -165,7 +154,7 @@ public class MemcachedCache implements Cache {
         String s = objectToString(o);
         if (s == null) return null;
         // add prefix to key so that keys won't duplicate easily
-        return prefix + "_" + s;
+        return name + "_" + s;
     }
 
     /**
