@@ -14,9 +14,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 
-/**
- * Created by zzp on 6/23/16.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:context-cache.xml"})
 public class MemcachedCacheTest {
@@ -38,6 +35,16 @@ public class MemcachedCacheTest {
     @After
     public void tearDown() throws Exception {
         memcachedClient.flushAll();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateCacheWithoutName() {
+        new MemcachedCache(null, memcachedClient);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateCacheWithoutClient() {
+        new MemcachedCache("hello", null);
     }
 
     @Test
