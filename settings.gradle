@@ -1,2 +1,3 @@
 include 'caching'
 include 'web'
+include 'demo'

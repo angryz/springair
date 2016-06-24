@@ -1,0 +1,12 @@
+version '1.0'
+
+dependencies {
+    compile(
+            project(':caching'),
+            project(':web')
+    )
+
+    testCompile(
+            "org.springframework:spring-test:${springVersion}"
+    )
+}
