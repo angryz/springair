@@ -2,10 +2,12 @@ package info.noconfuse.modules.cache.support;
 
 import info.noconfuse.modules.cache.MemcachedCache;
 import net.rubyeye.xmemcached.MemcachedClient;
+import net.rubyeye.xmemcached.MemcachedClientBuilder;
 import org.springframework.cache.Cache;
 import org.springframework.cache.support.AbstractCacheManager;
 import org.springframework.util.Assert;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -40,5 +42,9 @@ public class MemcachedCacheManager extends AbstractCacheManager {
 
     public void setMemcachedClient(MemcachedClient memcachedClient) {
         this.memcachedClient = memcachedClient;
+    }
+
+    public void setMemcachedClientBuilder(MemcachedClientBuilder clientBuilder) throws IOException {
+        this.memcachedClient = clientBuilder.build();
     }
 }

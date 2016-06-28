@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -25,11 +26,17 @@ public class MemcachedCacheManagerTest {
 
     private MemcachedClient memcachedClient;
 
+    @Autowired
+    private MemcachedCacheManager memcachedCacheManager;
+
     @Before
     public void setUp() throws IOException {
         memcachedClient = clientBuilder.build();
     }
 
+    /**
+     * 实例化 MemcachedCacheManager 时没有指定 cacheNames, 应抛出 IllegalArgumentException
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testLoadCachesWithoutCacheNames() {
         MemcachedCacheManager manager = new MemcachedCacheManager();
@@ -37,6 +44,9 @@ public class MemcachedCacheManagerTest {
         manager.loadCaches();
     }
 
+    /**
+     * 实例化 MemcachedCacheManager 时 cacheNames 是空集合, 应抛出 IllegalArgumentException
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testLoadCachesWithEmptyCacheNames() {
         MemcachedCacheManager manager = new MemcachedCacheManager();
@@ -45,6 +55,9 @@ public class MemcachedCacheManagerTest {
         manager.loadCaches();
     }
 
+    /**
+     * 实例化 MemcachedCacheManager 时没有指定 memcachedClient, 应抛出 IllegalArgumentException
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testLoadCachesWithoutClient() {
         MemcachedCacheManager manager = new MemcachedCacheManager();
@@ -52,6 +65,9 @@ public class MemcachedCacheManagerTest {
         manager.loadCaches();
     }
 
+    /**
+     * MemcachedCacheManager 实例可以创建 Cache 实例
+     */
     @Test
     public void testLoadCaches() {
         MemcachedCacheManager manager = new MemcachedCacheManager();
@@ -62,5 +78,20 @@ public class MemcachedCacheManagerTest {
         Cache cache = caches.iterator().next();
         Assert.assertTrue(cache instanceof MemcachedCache);
         Assert.assertTrue(cache.getName().equals("hello"));
+    }
+
+    /**
+     * 通过 Spring 实例化 MemcachedCacheManager
+     */
+    @Test
+    public void testSpringConfig() {
+        Set<Cache> caches = (Set<Cache>) memcachedCacheManager.loadCaches();
+        Assert.assertTrue(caches.size() == 2);
+        Iterator<Cache> it = caches.iterator();
+        while (it.hasNext()) {
+            Cache cache = it.next();
+            Assert.assertTrue(cache instanceof MemcachedCache);
+            Assert.assertTrue(cache.getName().equals("foobar") || cache.getName().equals("hello"));
+        }
     }
 }

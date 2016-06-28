@@ -9,4 +9,14 @@
             <bean class="net.rubyeye.xmemcached.command.BinaryCommandFactory"/>
         </property>
     </bean>
+
+    <bean id="memcachedCacheManager" class="info.noconfuse.modules.cache.support.MemcachedCacheManager">
+        <property name="memcachedClientBuilder" ref="memcachedClientBuilder"/>
+        <property name="cacheNames">
+            <set>
+                <value>foobar</value>
+                <value>hello</value>
+            </set>
+        </property>
+    </bean>
 </beans>
