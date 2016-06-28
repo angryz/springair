@@ -18,3 +18,7 @@ gradle :modulename:build
 
 Gradle 的使用请参考 [Gradle User Guide](https://docs.gradle.org/current/userguide/userguide.html)
 
+
+### 使用
+
+具体请查看[参考文档](../../wiki)
