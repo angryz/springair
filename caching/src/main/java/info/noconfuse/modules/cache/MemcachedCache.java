@@ -82,6 +82,9 @@ public class MemcachedCache implements Cache {
         deleteAll();
     }
 
+    // TODO 针对下面方法中可能发生的异常应考虑合适的处理方式,不应仅仅打印日志
+    // TODO 思考操作分布式缓存失败时,可能发生什么,如何降低数据不一致的概率
+
     /**
      * 通过 xmemcached 客户端访问 memcached 服务并查询缓存的数据
      *
