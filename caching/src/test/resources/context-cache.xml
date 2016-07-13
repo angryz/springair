@@ -12,6 +12,7 @@
 
     <bean id="memcachedCacheManager" class="info.noconfuse.modules.cache.support.MemcachedCacheManager">
         <property name="memcachedClientBuilder" ref="memcachedClientBuilder"/>
+        <property name="expireSeconds" value="180"/>
         <property name="cacheNames">
             <set>
                 <value>foobar</value>

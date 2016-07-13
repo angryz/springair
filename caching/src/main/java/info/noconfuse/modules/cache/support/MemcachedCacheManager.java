@@ -23,6 +23,8 @@ public class MemcachedCacheManager extends AbstractCacheManager {
 
     private MemcachedClient memcachedClient;
 
+    private Integer expireSeconds;
+
     @Override
     protected Collection<? extends Cache> loadCaches() {
         Assert.notNull(cacheNames, "cacheNames must be assigned");
@@ -30,8 +32,14 @@ public class MemcachedCacheManager extends AbstractCacheManager {
         Assert.notNull(memcachedClient, "memcachedClient must be assigned");
 
         Set<MemcachedCache> cacheSet = new LinkedHashSet<>(cacheNames.size());
-        for (String cacheName : cacheNames) {
-            cacheSet.add(new MemcachedCache(cacheName, memcachedClient));
+        if (expireSeconds != null) {
+            for (String cacheName : cacheNames) {
+                cacheSet.add(new MemcachedCache(cacheName, memcachedClient, expireSeconds));
+            }
+        } else {
+            for (String cacheName : cacheNames) {
+                cacheSet.add(new MemcachedCache(cacheName, memcachedClient));
+            }
         }
         return cacheSet;
     }
@@ -46,5 +54,9 @@ public class MemcachedCacheManager extends AbstractCacheManager {
 
     public void setMemcachedClientBuilder(MemcachedClientBuilder clientBuilder) throws IOException {
         this.memcachedClient = clientBuilder.build();
+    }
+
+    public void setExpireSeconds(Integer expireSeconds) {
+        this.expireSeconds = expireSeconds;
     }
 }
