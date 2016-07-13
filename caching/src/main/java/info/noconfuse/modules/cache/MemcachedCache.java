@@ -21,15 +21,24 @@ public class MemcachedCache implements Cache {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MemcachedCache.class);
 
+    private static final int DEFAULT_EXPIRE = 60 * 60; // default expire time is 1 hour
+
     private String name;
 
     private MemcachedClient memcachedClient;
 
-    public MemcachedCache(String name, MemcachedClient memcachedClient) {
+    private int expire;
+
+    public MemcachedCache(final String name, final MemcachedClient memcachedClient) {
+        this(name, memcachedClient, DEFAULT_EXPIRE);
+    }
+
+    public MemcachedCache(final String name, final MemcachedClient memcachedClient, final int expire) {
         Assert.notNull(name, "Cache name must be assigned");
         Assert.notNull(memcachedClient, "MemcachedClient must be assigned");
         this.name = name;
         this.memcachedClient = memcachedClient;
+        this.expire = expire;
     }
 
     @Override
@@ -110,7 +119,7 @@ public class MemcachedCache implements Cache {
      */
     protected void save(String key, Object value) {
         try {
-            memcachedClient.set(key, 0, value);
+            memcachedClient.set(key, expire, value);
         } catch (TimeoutException e) {
             LOGGER.error("Timeout when caching data for key:{}", key, e);
         } catch (InterruptedException e) {
