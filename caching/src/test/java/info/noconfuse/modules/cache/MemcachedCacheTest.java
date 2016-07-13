@@ -101,4 +101,15 @@ public class MemcachedCacheTest {
         target = memcachedClient.get("test_" + key + "_new");
         Assert.assertNull(target);
     }
+
+    @Test
+    public void testExpire() throws Exception {
+        MemcachedCache cache = new MemcachedCache("short-lived", memcachedClient, 2);
+        cache.put("die", "young");
+        String val = memcachedClient.get("short-lived_die");
+        Assert.assertEquals("young", val);
+        Thread.sleep(2000);
+        val = memcachedClient.get("short-lived_die");
+        Assert.assertNull(val);
+    }
 }
