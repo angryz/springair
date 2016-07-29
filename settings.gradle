@@ -1,4 +1,4 @@
 include 'caching'
 include 'web'
-include 'rpc'
+include 'rpc', 'rpc:rpc-client-demo', 'rpc:rpc-consumer-demo', 'rpc:rpc-provider-demo'
 include 'demo'

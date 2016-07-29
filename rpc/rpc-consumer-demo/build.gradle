@@ -1,0 +1,21 @@
+jar {
+    baseName = "${rootProject.name}-rpc-consumer-demo"
+    version = '1.0.0'
+}
+
+dependencies {
+    compile(
+            "org.springframework:spring-web:${springVersion}",
+    )
+
+    // serialization
+    compile(
+            'com.fasterxml.jackson.core:jackson-core:2.7.3',
+            'com.fasterxml.jackson.core:jackson-databind:2.7.3'
+    )
+
+    testCompile(
+            "org.springframework:spring-test:${springVersion}",
+            'javax.servlet:javax.servlet-api:3.0.1'
+    )
+}
