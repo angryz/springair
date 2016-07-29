@@ -22,10 +22,4 @@ dependencies {
     }
     compile("org.springframework.boot:spring-boot-starter-jetty")
     compile("org.springframework:spring-web")
-
-    // serialization
-    compile(
-            'com.fasterxml.jackson.core:jackson-core',
-            'com.fasterxml.jackson.core:jackson-databind'
-    )
 }
