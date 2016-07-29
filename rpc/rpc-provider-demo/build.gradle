@@ -1,22 +1,31 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.7.RELEASE")
+    }
+}
+
+apply plugin: 'spring-boot'
+
 jar {
     baseName = "${rootProject.name}-rpc-provider-demo"
     version = '1.0.0'
 }
 
 dependencies {
-    compile(
-            project(':rpc:rpc-client-demo'),
-            "org.springframework:spring-web:${springVersion}",
-    )
+    compile(project(':rpc:rpc-client-demo'))
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework:spring-web")
 
     // serialization
     compile(
-            'com.fasterxml.jackson.core:jackson-core:2.7.3',
-            'com.fasterxml.jackson.core:jackson-databind:2.7.3'
-    )
-
-    testCompile(
-            "org.springframework:spring-test:${springVersion}",
-            'javax.servlet:javax.servlet-api:3.0.1'
+            'com.fasterxml.jackson.core:jackson-core',
+            'com.fasterxml.jackson.core:jackson-databind'
     )
 }

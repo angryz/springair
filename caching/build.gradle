@@ -3,6 +3,7 @@ jar.archiveName "${rootProject.name}-caching-${version}.jar"
 
 dependencies {
     compile(
+            "org.slf4j:slf4j-api:${slf4jVersion}",
             "org.springframework:spring-context:${springVersion}",
             'com.googlecode.xmemcached:xmemcached:2.0.+'
     )
