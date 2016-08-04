@@ -16,7 +16,7 @@ jar {
 }
 
 dependencies {
-    compile(project(':rpc:rpc-client-demo'))
+    compile(project(':rpc:rpc-client-demo'), project(':rpc'))
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
     }
