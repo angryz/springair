@@ -14,7 +14,7 @@ public class ConsumerConfiguration {
     @Bean
     HttpInvokerProxyFactoryBean httpInvokerProxyFactoryBean() {
         HttpInvokerProxyFactoryBean factoryBean = new HttpInvokerProxyFactoryBean();
-        factoryBean.setServiceUrl("http://localhost:8080/userService");
+        factoryBean.setServiceUrl("http://localhost:8080/UserService");
         factoryBean.setServiceInterface(UserService.class);
         return factoryBean;
     }

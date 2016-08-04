@@ -5,13 +5,8 @@ jar {
 
 dependencies {
     compile(
+            "org.slf4j:slf4j-api:${slf4jVersion}",
             "org.springframework:spring-web:${springVersion}",
-    )
-
-    // serialization
-    compile(
-            'com.fasterxml.jackson.core:jackson-core:2.7.3',
-            'com.fasterxml.jackson.core:jackson-databind:2.7.3'
     )
 
     testCompile(

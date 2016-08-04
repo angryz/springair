@@ -1,6 +1,8 @@
 package info.noconfuse.springair.rpc.demo.provider;
 
+import info.noconfuse.springair.rpc.AutoHttpInvokerServicesExporter;
 import info.noconfuse.springair.rpc.RpcService;
+import info.noconfuse.springair.rpc.ServiceRegistration;
 import info.noconfuse.springair.rpc.demo.client.UserService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ public class RemotingConfiguration implements ApplicationContextAware {
 
     private ApplicationContext context;
 
+    /*
     @Autowired
     private UserService userService;
 
@@ -37,8 +40,24 @@ public class RemotingConfiguration implements ApplicationContextAware {
         for (Map.Entry<String, Object> entry : beanMap.entrySet()) {
             System.out.println(">>> " + entry.getKey() + " : " + entry.getValue());
             Class[] classes = entry.getValue().getClass().getInterfaces();
-            System.out.println("--- " + classes[0]);
+            System.out.println("--- " + classes[0].getName());
+            System.out.println("--- " + classes[0].getCanonicalName());
+            System.out.println("--- " + classes[0].getTypeName());
+            System.out.println("--- " + classes[0].getSimpleName());
         }
+        return exporter;
+    }
+    */
+
+    @Bean
+    AutoHttpInvokerServicesExporter autoHttpInvokerServicesExporter() {
+        ServiceRegistration  serviceRegistration = new ServiceRegistration() {
+            @Override
+            public void registerService(String serviceName) {
+                System.out.println(">>> register " + serviceName);
+            }
+        };
+        AutoHttpInvokerServicesExporter exporter = new AutoHttpInvokerServicesExporter(serviceRegistration);
         return exporter;
     }
 

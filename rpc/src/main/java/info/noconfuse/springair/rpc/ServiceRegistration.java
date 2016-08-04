@@ -7,4 +7,5 @@ package info.noconfuse.springair.rpc;
  */
 public interface ServiceRegistration {
 
+    void registerService(String serviceName);
 }
