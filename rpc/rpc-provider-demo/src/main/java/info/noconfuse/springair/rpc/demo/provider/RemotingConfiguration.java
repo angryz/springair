@@ -24,14 +24,8 @@ public class RemotingConfiguration implements ApplicationContextAware {
     private ApplicationContext context;
 
     /*
-    @Autowired
-    private UserService userService;
-
-    @Bean(name = "/userService")
+    @Bean(name = "/UserService")
     HttpInvokerServiceExporter httpInvokerServiceExporter() {
-        HttpInvokerServiceExporter exporter = new HttpInvokerServiceExporter();
-        exporter.setService(userService);
-        exporter.setServiceInterface(UserService.class);
         String[] beanNames = context.getBeanNamesForAnnotation(RpcService.class);
         for (String beanName : beanNames) {
             System.out.println(">>> " + beanName);
@@ -45,6 +39,9 @@ public class RemotingConfiguration implements ApplicationContextAware {
             System.out.println("--- " + classes[0].getTypeName());
             System.out.println("--- " + classes[0].getSimpleName());
         }
+        HttpInvokerServiceExporter exporter = new HttpInvokerServiceExporter();
+        exporter.setService(beanMap.get("userServiceImpl"));
+        exporter.setServiceInterface(UserService.class);
         return exporter;
     }
     */

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -40,12 +41,14 @@ public class AutoHttpInvokerServicesExporter implements ApplicationContextAware 
             Object serviceImpl = entry.getValue();
             Class[] interfaces = serviceImpl.getClass().getInterfaces();
             // create HttpInvokerServiceExporter instance for each bean
+            DefaultListableBeanFactory beanFactory = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();
             HttpInvokerServiceExporter exporter = new HttpInvokerServiceExporter();
             exporter.setService(serviceImpl);
             exporter.setServiceInterface(interfaces[0]);
             String exportedName = "/" + interfaces[0].getSimpleName();
             LOG.info("Registering RPC service '{}'", exportedName);
             beanFactory.registerSingleton(exportedName, exporter);
+            beanFactory.initializeBean(exporter, exportedName);
             serviceRegistration.registerService(exportedName);
         }
     }
