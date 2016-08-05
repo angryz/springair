@@ -1,19 +1,13 @@
 package info.noconfuse.springair.rpc.demo.provider;
 
 import info.noconfuse.springair.rpc.AutoHttpInvokerServicesExporter;
-import info.noconfuse.springair.rpc.RpcService;
+import info.noconfuse.springair.rpc.LocalHostUtils;
 import info.noconfuse.springair.rpc.ServiceRegistration;
-import info.noconfuse.springair.rpc.demo.client.UserService;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.remoting.httpinvoker.HttpInvokerServiceExporter;
-import org.springframework.util.Assert;
-
-import java.util.Map;
 
 /**
  * Created by zzp on 7/29/16.
@@ -52,6 +46,8 @@ public class RemotingConfiguration implements ApplicationContextAware {
             @Override
             public void registerService(String serviceName) {
                 System.out.println(">>> register " + serviceName);
+                System.out.println(">>> ip " + LocalHostUtils.ip());
+                System.out.println(">>> port " + LocalHostUtils.serverPort());
             }
         };
         AutoHttpInvokerServicesExporter exporter = new AutoHttpInvokerServicesExporter(serviceRegistration);
