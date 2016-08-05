@@ -8,6 +8,7 @@ dependencies {
             "org.slf4j:slf4j-api:${slf4jVersion}",
             "org.springframework:spring-web:${springVersion}",
     )
+    compile('org.apache.curator:curator-framework:2.11.0')
 
     testCompile(
             "org.springframework:spring-test:${springVersion}",

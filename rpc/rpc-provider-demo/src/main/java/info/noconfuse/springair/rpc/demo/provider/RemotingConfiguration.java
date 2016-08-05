@@ -42,12 +42,10 @@ public class RemotingConfiguration implements ApplicationContextAware {
 
     @Bean
     AutoHttpInvokerServicesExporter autoHttpInvokerServicesExporter() {
-        ServiceRegistration  serviceRegistration = new ServiceRegistration() {
+        ServiceRegistration serviceRegistration = new ServiceRegistration() {
             @Override
             public void registerService(String serviceName) {
-                System.out.println(">>> register " + serviceName);
-                System.out.println(">>> ip " + LocalHostUtils.ip());
-                System.out.println(">>> port " + LocalHostUtils.serverPort());
+                System.out.println(">>> http://" + LocalHostUtils.ip() + ":" + LocalHostUtils.serverPort() + serviceName);
             }
         };
         AutoHttpInvokerServicesExporter exporter = new AutoHttpInvokerServicesExporter(serviceRegistration);
