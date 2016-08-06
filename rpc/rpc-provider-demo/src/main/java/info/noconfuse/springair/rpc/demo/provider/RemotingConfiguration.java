@@ -1,9 +1,7 @@
 package info.noconfuse.springair.rpc.demo.provider;
 
-import info.noconfuse.springair.rpc.AutoHttpInvokerServicesExporter;
-import info.noconfuse.springair.rpc.LocalHostUtils;
-import info.noconfuse.springair.rpc.ServiceRegistration;
-import info.noconfuse.springair.rpc.ZookeeperServiceRegistration;
+import info.noconfuse.springair.rpc.provider.AutoHttpInvokerServicesExporter;
+import info.noconfuse.springair.rpc.provider.ZookeeperServiceRegistration;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

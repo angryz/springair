@@ -1,4 +1,4 @@
-package info.noconfuse.springair.rpc;
+package info.noconfuse.springair.rpc.consumer;
 
 /**
  * Discover a service provider from Registry Center.

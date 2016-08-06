@@ -1,6 +1,6 @@
 package info.noconfuse.springair.rpc.demo.provider;
 
-import info.noconfuse.springair.rpc.AutoHttpInvokerServicesExporter;
+import info.noconfuse.springair.rpc.provider.AutoHttpInvokerServicesExporter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;

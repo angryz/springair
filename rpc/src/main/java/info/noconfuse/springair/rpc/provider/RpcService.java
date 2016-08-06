@@ -1,4 +1,4 @@
-package info.noconfuse.springair.rpc;
+package info.noconfuse.springair.rpc.provider;
 
 import org.springframework.stereotype.Component;
 

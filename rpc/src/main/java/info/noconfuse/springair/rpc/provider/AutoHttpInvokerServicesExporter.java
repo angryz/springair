@@ -1,4 +1,4 @@
-package info.noconfuse.springair.rpc;
+package info.noconfuse.springair.rpc.provider;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
