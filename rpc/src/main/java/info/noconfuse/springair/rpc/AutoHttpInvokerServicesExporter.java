@@ -33,7 +33,7 @@ public class AutoHttpInvokerServicesExporter implements ApplicationContextAware 
     }
 
     @PostConstruct
-    protected void registerServices() {
+    protected void registerServices() throws Exception {
         // find beans which annotated with @RpcService
         Map<String, Object> serviceBeanMaps = applicationContext.getBeansWithAnnotation(RpcService.class);
         LOG.debug("Find {} beans annotated with @RpcService", serviceBeanMaps.size());
