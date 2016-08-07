@@ -83,19 +83,6 @@ public abstract class ZookeeperRegistryClient {
                 .forPath(path);
     }
 
-    /**
-     * Make zookeeper node path with node names.
-     */
-    protected String makeNodePath(String... nodes) {
-        StringBuilder sb = new StringBuilder();
-        for (String node : nodes) {
-            if (!node.startsWith("/"))
-                sb.append("/");
-            sb.append(node);
-        }
-        return sb.toString();
-    }
-
     public String getRegistryAddress() {
         return registryAddress;
     }

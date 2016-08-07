@@ -1,8 +1,11 @@
 package info.noconfuse.springair.rpc.consumer;
 
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
+import org.apache.curator.utils.ZKPaths;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 /**
  * Use zookeeper as registry of services.
@@ -25,9 +28,13 @@ public class ZookeeperServiceDiscovery extends ZookeeperRegistryClient implement
 
     @Override
     public String getServiceAddress(String serviceName) throws Exception {
-        String path = makeNodePath(serviceName, "127.0.0.1:8080");
-        if (getZookeeperClient().checkExists().forPath(path) == null)
-            throw new NoSuchElementException("Cannot find path '" + path + "' in zookeeper");
+        if (getZookeeperClient().checkExists().forPath(serviceName) == null)
+            throw new NoSuchElementException("No service named as '" + serviceName + "' registered");
+        List<String> instanceList = getZookeeperClient().getChildren().forPath(serviceName);
+        if (instanceList == null || instanceList.isEmpty())
+            throw new NoSuchElementException("No instance of '" + serviceName + "' registered");
+        int choice = new Random().nextInt(instanceList.size());
+        String path = ZKPaths.makePath(serviceName, instanceList.get(choice));
         return new String(getZookeeperClient().getData().forPath(path), "UTF-8");
     }
 }

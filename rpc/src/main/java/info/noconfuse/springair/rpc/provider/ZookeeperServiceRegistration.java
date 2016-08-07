@@ -2,6 +2,7 @@ package info.noconfuse.springair.rpc.provider;
 
 import info.noconfuse.springair.rpc.LocalHostUtils;
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
+import org.apache.curator.utils.ZKPaths;
 import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,7 @@ public class ZookeeperServiceRegistration extends ZookeeperRegistryClient implem
         // create ephemral node for service instance
         getZookeeperClient().create().creatingParentsIfNeeded()
                 .withMode(CreateMode.EPHEMERAL)
-                .forPath(makeNodePath(serviceName, ip + ":" + port), url.getBytes("UTF-8"));
+                .forPath(ZKPaths.makePath(serviceName, ip + ":" + port), url.getBytes("UTF-8"));
         LOG.info("Registered service:{} to zookeeper.", serviceName);
     }
 
