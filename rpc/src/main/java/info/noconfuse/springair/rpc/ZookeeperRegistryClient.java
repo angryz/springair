@@ -53,6 +53,7 @@ public abstract class ZookeeperRegistryClient {
                 if (zookeeperClient == null) {
                     RetryPolicy retryPolicy = new BoundedExponentialBackoffRetry(500, 3000, 5);
                     zookeeperClient = CuratorFrameworkFactory.builder()
+                            .namespace(nameSpace)
                             .connectString(registryAddress)
                             .retryPolicy(retryPolicy)
                             .connectionTimeoutMs(5000)
@@ -63,8 +64,6 @@ public abstract class ZookeeperRegistryClient {
             }
         }
         LOG.info("Connected to zookeeper:{}", registryAddress);
-        if (zookeeperClient.checkExists().forPath("/" + nameSpace) == null)
-            zookeeperClient.create().forPath("/" + nameSpace);
     }
 
     @PreDestroy
@@ -88,8 +87,7 @@ public abstract class ZookeeperRegistryClient {
      * Make zookeeper node path with node names.
      */
     protected String makeNodePath(String... nodes) {
-        StringBuilder sb = new StringBuilder("/");
-        sb.append(getNameSpace());
+        StringBuilder sb = new StringBuilder();
         for (String node : nodes) {
             if (!node.startsWith("/"))
                 sb.append("/");
