@@ -1,6 +1,7 @@
 package info.noconfuse.springair.rpc.consumer;
 
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
+import org.apache.curator.framework.recipes.cache.NodeCache;
 import org.apache.curator.utils.ZKPaths;
 
 import java.util.List;
@@ -30,6 +31,10 @@ public class ZookeeperServiceDiscovery extends ZookeeperRegistryClient implement
     public String getServiceAddress(String serviceName) throws Exception {
         if (getZookeeperClient().checkExists().forPath(serviceName) == null)
             throw new NoSuchElementException("No service named as '" + serviceName + "' registered");
+        NodeCache serviceNodeCache = new NodeCache(getZookeeperClient(),
+                ZKPaths.makePath(getNameSpace(), serviceName));
+        serviceNodeCache.start();
+        serviceNodeCache.getListenable().addListener(new ZkServiceNodeCacheListener());
         List<String> instanceList = getZookeeperClient().getChildren().forPath(serviceName);
         if (instanceList == null || instanceList.isEmpty())
             throw new NoSuchElementException("No instance of '" + serviceName + "' registered");
