@@ -3,6 +3,8 @@ package info.noconfuse.springair.rpc.consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
+import org.springframework.remoting.support.RemoteInvocation;
+import org.springframework.remoting.support.RemoteInvocationResult;
 
 /**
  * Instead of specify a service url, this class use ServiceDiscovery
@@ -29,6 +31,7 @@ public class AutoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBean
 
     @Override
     public String getServiceUrl() {
+        LOG.info(" ---------- call getServiceUrl() ---------- ");
         if (!RemoteServiceAddressHolder.isExists(serviceName)) {
             synchronized (AutoHttpInvokerProxyFactoryBean.class) {
                 if (!RemoteServiceAddressHolder.isExists(serviceName)) {
@@ -41,5 +44,17 @@ public class AutoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBean
             }
         }
         return RemoteServiceAddressHolder.getAddress(serviceName);
+    }
+
+    @Override
+    protected RemoteInvocationResult executeRequest(RemoteInvocation invocation) throws Exception {
+        try {
+            return super.executeRequest(invocation);
+        } catch (Exception e) {
+            LOG.error(e.getMessage());
+            // sleep 200ms then retry once
+            Thread.sleep(200);
+            return super.executeRequest(invocation);
+        }
     }
 }

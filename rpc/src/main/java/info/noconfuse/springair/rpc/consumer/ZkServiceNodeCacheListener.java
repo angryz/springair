@@ -32,19 +32,12 @@ public class ZkServiceNodeCacheListener implements PathChildrenCacheListener {
     public void childEvent(CuratorFramework client, PathChildrenCacheEvent event) throws Exception {
         if (event.getData() == null)
             return;
-        String nodePath = event.getData().getPath();
         String nodeValue = new String(event.getData().getData(), "UTF-8");
         switch (event.getType()) {
             case CHILD_REMOVED:
                 // service instance used by this consumer offline
-                if (nodePath.equals(getAddress(serviceName))) {
+                if (nodeValue.equals(getAddress(serviceName))) {
                     remove(serviceName);
-                }
-                break;
-            case CHILD_UPDATED:
-                // service instance used by this consumer changed address
-                if (nodePath.equals(getAddress(serviceName))) {
-                    setAddress(serviceName, nodeValue);
                 }
                 break;
             default:

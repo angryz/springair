@@ -19,8 +19,12 @@ public class ConsumerApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         UserService userService = (UserService) httpInvokerProxyFactoryBean.getObject();
-        String results = userService.hello("Raymond");
-        System.out.println(results);
+        long endTime = System.currentTimeMillis() + (2 * 60 * 1000);//run 2 minutes
+        while (System.currentTimeMillis() < endTime) {
+            String results = userService.hello("Raymond");
+            System.out.println(System.currentTimeMillis() + " | " + results);
+            Thread.sleep(1000);
+        }
     }
 
     public static void main(String[] args) {
