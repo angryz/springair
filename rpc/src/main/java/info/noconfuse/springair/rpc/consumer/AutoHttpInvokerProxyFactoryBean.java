@@ -16,7 +16,6 @@ public class AutoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBean
 
     private final ServiceDiscovery serviceDiscovery;
     private String serviceName;
-    private String serviceUrl;
 
     public AutoHttpInvokerProxyFactoryBean(ServiceDiscovery serviceDiscovery) {
         this.serviceDiscovery = serviceDiscovery;
@@ -30,18 +29,17 @@ public class AutoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBean
 
     @Override
     public String getServiceUrl() {
-        if (serviceUrl == null) {
+        if (!RemoteServiceAddressHolder.isExists(serviceName)) {
             synchronized (AutoHttpInvokerProxyFactoryBean.class) {
-                if (serviceUrl == null) {
+                if (!RemoteServiceAddressHolder.isExists(serviceName)) {
                     try {
-                        serviceUrl = serviceDiscovery.getServiceAddress(serviceName);
+                        return serviceDiscovery.getServiceAddress(serviceName);
                     } catch (Exception e) {
                         throw new IllegalStateException(e);
                     }
                 }
             }
-            LOG.info("Got service url : {}", serviceUrl);
         }
-        return serviceUrl;
+        return RemoteServiceAddressHolder.getAddress(serviceName);
     }
 }

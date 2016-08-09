@@ -4,6 +4,8 @@ import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.utils.ZKPaths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -21,6 +23,8 @@ import java.util.concurrent.ConcurrentMap;
  * @author Zheng Zhipeng
  */
 public class ZookeeperServiceDiscovery extends ZookeeperRegistryClient implements ServiceDiscovery {
+
+    private static final Logger LOG = LoggerFactory.getLogger(ZookeeperServiceDiscovery.class);
 
     private ConcurrentMap<String, PathChildrenCache> caches;
 
@@ -51,6 +55,7 @@ public class ZookeeperServiceDiscovery extends ZookeeperRegistryClient implement
         List<ChildData> children = serviceNodeCache.getCurrentData();
         int choice = new Random().nextInt(children.size());
         String url = new String(children.get(choice).getData(), "UTF-8");
+        LOG.info("Got service url : {}", url);
         RemoteServiceAddressHolder.setAddress(serviceName, url);
         return url;
     }
