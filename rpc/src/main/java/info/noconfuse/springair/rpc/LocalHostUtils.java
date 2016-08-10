@@ -14,7 +14,7 @@ public class LocalHostUtils {
      * Get localhost ip address.
      */
     public static String ip() {
-        String ip = System.getProperty("local.ip");
+        String ip = System.getProperty("server.ip");
         if (ip != null)
             return ip;
         try {
@@ -29,7 +29,7 @@ public class LocalHostUtils {
      */
     public static int serverPort() {
         int portNum = -1;
-        String port = System.getProperty("local.server.port");
+        String port = System.getProperty("server.port");
         port = port == null ? System.getProperty("tomcat.server.port") : port;
         if (port != null) {
             try {
