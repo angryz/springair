@@ -1,16 +1,28 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Services Monitor</title>
     <style type="text/css">
-        h2 {
-            margin-top: 40px;
-            margin-bottom: 10px;
+        div {
+            margin: 30px auto 20px auto;
+            padding: 20px;
+            border-top: 1px dashed;
         }
+
+        h2 {
+            margin: 0 0 10px 0;
+        }
+
         table {
             border: 1px solid;
             border-collapse: collapse;
+        }
+
+        th {
+            font-weight: bold;
+            background-color: #dcdcdc;
         }
         th, td {
             border: 1px solid;
@@ -19,32 +31,20 @@
     </style>
 </head>
 <body>
-<h2>Service Name: <span style="color:#b22222">UserService</span></h2>
-<table>
-    <tr>
-        <th>Node Name</th>
-        <th>Service URL</th>
-    </tr>
-    <tr>
-        <td>192.169.20.60:8082</td>
-        <td>http://192.169.20.60:8082/UserService</td>
-    </tr>
-    <tr>
-        <td>127.0.0.1:8081</td>
-        <td>http://127.0.0.1:8081/UserService</td>
-    </tr>
-</table>
-
-<h2>Service Name: <span style="color:#b22222">PushService</span></h2>
-<table border="1">
-    <tr>
-        <th>Node Name</th>
-        <th>Service URL</th>
-    </tr>
-    <tr>
-        <td>192.169.20.90:8088</td>
-        <td>http://192.169.20.90:8088/PushService</td>
-    </tr>
-</table>
+<div th:each="service : ${services}">
+    <h2 style="color:#b22222" th:text="${service.name}">ServiceName</h2>
+    <table>
+        <tr>
+            <th>Node Name</th>
+            <th>Service URL</th>
+            <th>Node Path</th>
+        </tr>
+        <tr th:each="inst : ${service.children}">
+            <td th:text="${inst.name}">ServiceNodeName</td>
+            <td th:text="${inst.url}">ServiceNodeValue</td>
+            <td th:text="${inst.nodePath}">ServiceNodePath</td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>
