@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Services Monitor</title>
+    <style type="text/css">
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+        table {
+            border: 1px solid;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid;
+            padding: 2px 20px;
+        }
+    </style>
+</head>
+<body>
+<h2>Service Name: <span style="color:#b22222">UserService</span></h2>
+<table>
+    <tr>
+        <th>Node Name</th>
+        <th>Service URL</th>
+    </tr>
+    <tr>
+        <td>192.169.20.60:8082</td>
+        <td>http://192.169.20.60:8082/UserService</td>
+    </tr>
+    <tr>
+        <td>127.0.0.1:8081</td>
+        <td>http://127.0.0.1:8081/UserService</td>
+    </tr>
+</table>
+
+<h2>Service Name: <span style="color:#b22222">PushService</span></h2>
+<table border="1">
+    <tr>
+        <th>Node Name</th>
+        <th>Service URL</th>
+    </tr>
+    <tr>
+        <td>192.169.20.90:8088</td>
+        <td>http://192.169.20.90:8088/PushService</td>
+    </tr>
+</table>
+</body>
+</html>

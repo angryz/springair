@@ -3,7 +3,6 @@ package info.noconfuse.springair.rpc.consumer;
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
-import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
