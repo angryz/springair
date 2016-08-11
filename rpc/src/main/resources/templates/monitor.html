@@ -39,11 +39,13 @@
             <th>Node Name</th>
             <th>Service URL</th>
             <th>Node Path</th>
+            <th>Created Time</th>
         </tr>
         <tr th:each="inst : ${service.children}">
             <td th:text="${inst.name}">ServiceNodeName</td>
-            <td th:text="${inst.url}">ServiceNodeValue</td>
+            <td th:text="${inst.address}">ServiceNodeValue</td>
             <td th:text="${inst.nodePath}">ServiceNodePath</td>
+            <td th:text="${#dates.format(inst.ctime, 'yyyy/MM/dd HH:mm')}">ServiceNodeCreateTime</td>
         </tr>
     </table>
 </div>

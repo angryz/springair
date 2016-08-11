@@ -9,11 +9,13 @@ import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
 import org.apache.curator.framework.recipes.cache.TreeCacheListener;
 import org.apache.curator.utils.ZKPaths;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
@@ -61,7 +63,9 @@ public class ZookeeperServiceMonitor extends ZookeeperRegistryClient implements 
                                 LOG.info("Instance of {} : {} ", child, grandChild);
                                 String nodePath = ZKPaths.makePath(child, grandChild);
                                 String url = new String(getZookeeperClient().getData().forPath(nodePath), "UTF-8");
-                                serviceNodes.add(new ServiceNode(grandChild, url, nodePath));
+                                Stat stat = getZookeeperClient().checkExists().forPath(nodePath);
+                                serviceNodes.add(ServiceNode.builder().name(grandChild)
+                                        .address(url).nodePath(nodePath).ctime(stat.getCtime()).build());
                             }
                             allServices.add(new ServiceGroup(child, serviceNodes));
                         }
@@ -88,7 +92,9 @@ public class ZookeeperServiceMonitor extends ZookeeperRegistryClient implements 
                 for (Map.Entry<String, ChildData> subEntry : grandChildren.entrySet()) {
                     LOG.info("Instance of {} : {} ", entry.getKey(), subEntry.getKey());
                     String url = new String(subEntry.getValue().getData(), "UTF-8");
-                    serviceNodes.add(new ServiceNode(subEntry.getKey(), url, subEntry.getValue().getPath()));
+                    serviceNodes.add(ServiceNode.builder().name(subEntry.getKey())
+                            .address(url).nodePath(subEntry.getValue().getPath())
+                            .ctime(subEntry.getValue().getStat().getCtime()).build());
                 }
                 allServices.add(new ServiceGroup(entry.getKey(), serviceNodes));
             }

@@ -1,21 +1,22 @@
 package info.noconfuse.springair.rpc;
 
+import java.util.Date;
+
 /**
  * @author Zheng Zhipeng
  */
 public class ServiceNode {
 
     private String name;
-    private String url;
+    private String address;
     private String nodePath;
+    private Date ctime;
 
     public ServiceNode() {
     }
 
-    public ServiceNode(String name, String url, String nodePath) {
-        this.name = name;
-        this.url = url;
-        this.nodePath = nodePath;
+    public static Builder builder() {
+        return new Builder();
     }
 
     public String getName() {
@@ -26,12 +27,12 @@ public class ServiceNode {
         this.name = name;
     }
 
-    public String getUrl() {
-        return url;
+    public String getAddress() {
+        return address;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getNodePath() {
@@ -40,5 +41,49 @@ public class ServiceNode {
 
     public void setNodePath(String nodePath) {
         this.nodePath = nodePath;
+    }
+
+    public Date getCtime() {
+        return ctime;
+    }
+
+    public void setCtime(Date ctime) {
+        this.ctime = ctime;
+    }
+
+    public static class Builder {
+        private String name;
+        private String address;
+        private String nodePath;
+        private Date ctime;
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder address(String address) {
+            this.address = address;
+            return this;
+        }
+
+        public Builder nodePath(String path) {
+            this.nodePath = path;
+            return this;
+        }
+
+        public Builder ctime(long ctime) {
+            this.ctime = new Date(ctime);
+            return this;
+        }
+
+        public ServiceNode build() {
+            ServiceNode node = new ServiceNode();
+            node.setName(name);
+            node.setAddress(address);
+            node.setNodePath(nodePath);
+            node.setCtime(ctime);
+            return node;
+        }
     }
 }
