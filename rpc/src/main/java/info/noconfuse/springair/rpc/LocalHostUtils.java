@@ -11,6 +11,20 @@ import java.net.UnknownHostException;
 public class LocalHostUtils {
 
     /**
+     * Get localhost hostname.
+     */
+    public static String hostName() {
+        String hostName = System.getProperty("server.name");
+        if (hostName != null)
+            return hostName;
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            return null;
+        }
+    }
+
+    /**
      * Get localhost ip address.
      */
     public static String ip() {

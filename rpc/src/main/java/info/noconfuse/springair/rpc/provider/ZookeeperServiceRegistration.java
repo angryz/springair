@@ -3,7 +3,6 @@ package info.noconfuse.springair.rpc.provider;
 import info.noconfuse.springair.rpc.LocalHostUtils;
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
 import org.apache.curator.utils.ZKPaths;
-import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -17,6 +16,7 @@ public class ZookeeperServiceRegistration extends ZookeeperRegistryClient implem
 
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperServiceRegistration.class);
 
+    private String hostName;
     private String ip;
     private int port;
 
@@ -26,6 +26,7 @@ public class ZookeeperServiceRegistration extends ZookeeperRegistryClient implem
 
     public ZookeeperServiceRegistration(String registryAddress, String nameSpace) {
         super(registryAddress, nameSpace);
+        hostName = LocalHostUtils.hostName();
         ip = LocalHostUtils.ip();
         port = LocalHostUtils.serverPort();
         Assert.isTrue(port > 0, "Can not find local server port config 'local.server.port' or 'tomcat.server.port'");
@@ -35,9 +36,8 @@ public class ZookeeperServiceRegistration extends ZookeeperRegistryClient implem
     public void registerService(String serviceName) throws Exception {
         String url = makeServiceUrl(serviceName);
         // create ephemral node for service instance
-        getZookeeperClient().create().creatingParentsIfNeeded()
-                .withMode(CreateMode.EPHEMERAL)
-                .forPath(ZKPaths.makePath(serviceName, ip + ":" + port), url.getBytes("UTF-8"));
+        String serviceInstName = hostName + "_" + port;
+        createEphemeralNode(ZKPaths.makePath(serviceName, serviceInstName), url.getBytes("UTF-8"));
         LOG.info("Registered service:{} to zookeeper.", serviceName);
     }
 

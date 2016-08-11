@@ -77,10 +77,10 @@ public abstract class ZookeeperRegistryClient {
     /**
      * Create an ephemeral node.
      */
-    protected void createEphemeralNode(String path) throws Exception {
+    protected void createEphemeralNode(String path, byte[] data) throws Exception {
         getZookeeperClient().create().creatingParentsIfNeeded()
                 .withMode(CreateMode.EPHEMERAL)
-                .forPath(path);
+                .forPath(path, data);
     }
 
     public String getRegistryAddress() {
