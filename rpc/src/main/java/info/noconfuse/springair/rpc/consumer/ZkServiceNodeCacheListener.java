@@ -7,7 +7,8 @@ import org.apache.curator.framework.recipes.cache.PathChildrenCacheListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static info.noconfuse.springair.rpc.consumer.RemoteServiceAddressHolder.*;
+import static info.noconfuse.springair.rpc.consumer.RemoteServiceAddressHolder.getAddress;
+import static info.noconfuse.springair.rpc.consumer.RemoteServiceAddressHolder.remove;
 
 /**
  * Handle {@code PathChildrenCacheEvent} of service node.
