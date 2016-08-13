@@ -31,4 +31,10 @@ public class MonitorController {
 
         return "monitor";
     }
+
+    @RequestMapping("/history")
+    public String history(Model model) {
+
+        return "model";
+    }
 }
