@@ -1,5 +1,6 @@
 package info.noconfuse.springair.rpc.demo.consumer;
 
+import info.noconfuse.springair.rpc.demo.client.User;
 import info.noconfuse.springair.rpc.demo.client.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -8,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
 
 /**
- * Created by zzp on 7/29/16.
  */
 @SpringBootApplication
 public class ConsumerApplication implements CommandLineRunner {
@@ -21,7 +21,7 @@ public class ConsumerApplication implements CommandLineRunner {
         UserService userService = (UserService) httpInvokerProxyFactoryBean.getObject();
         long endTime = System.currentTimeMillis() + (2 * 60 * 1000);//run 2 minutes
         while (System.currentTimeMillis() < endTime) {
-            String results = userService.hello("Raymond");
+            String results = userService.hello(new User("Peter", "Jackson"));
             System.out.println(System.currentTimeMillis() + " | " + results);
             Thread.sleep(1000);
         }

@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Created by zzp on 7/29/16.
  */
 @Configuration
 public class ConsumerConfiguration {

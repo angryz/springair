@@ -1,5 +1,6 @@
 package info.noconfuse.springair.rpc.demo.provider;
 
+import info.noconfuse.springair.rpc.demo.client.User;
 import info.noconfuse.springair.rpc.provider.RpcService;
 import info.noconfuse.springair.rpc.demo.client.UserService;
 
@@ -10,7 +11,7 @@ import info.noconfuse.springair.rpc.demo.client.UserService;
 public class UserServiceImpl implements UserService {
 
     @Override
-    public String hello(String user) {
+    public String hello(User user) {
         return "Hello " + user + "!";
     }
 

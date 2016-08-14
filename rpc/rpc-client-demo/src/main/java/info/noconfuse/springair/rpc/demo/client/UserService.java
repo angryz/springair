@@ -5,6 +5,6 @@ package info.noconfuse.springair.rpc.demo.client;
  */
 public interface UserService {
 
-    String hello(String user);
+    String hello(User user);
 
 }

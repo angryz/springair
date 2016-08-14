@@ -29,7 +29,7 @@ public class ZookeeperServiceRegistration extends ZookeeperRegistryClient implem
         hostName = LocalHostUtils.hostName();
         ip = LocalHostUtils.ip();
         port = LocalHostUtils.serverPort();
-        Assert.isTrue(port > 0, "Can not find local server port config 'local.server.port' or 'tomcat.server.port'");
+        Assert.isTrue(port > 0, "Can not find local server port config 'server.port' or 'tomcat.server.port'");
     }
 
     @Override
