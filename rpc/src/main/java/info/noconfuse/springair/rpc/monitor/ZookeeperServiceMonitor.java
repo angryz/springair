@@ -52,16 +52,17 @@ public class ZookeeperServiceMonitor extends ZookeeperRegistryClient implements 
                             LOG.info("EVENT {}", event.toString());
                         }
                     });
-                    List<String> children = getZookeeperClient().getChildren().forPath("/");
+                    List<String> children = getZookeeperClient().getChildren().forPath(DEFAULT_SERVICES_TOP_PATH);
                     allServices = new ArrayList<>(children.size());
                     if (children != null && !children.isEmpty()) {
                         LOG.info("All Services : {} ", children.toString());
                         for (String child : children) {
-                            List<String> grandChildren = getZookeeperClient().getChildren().forPath("/" + child);
+                            String childPath = ZKPaths.makePath(DEFAULT_SERVICES_TOP_PATH, child);
+                            List<String> grandChildren = getZookeeperClient().getChildren().forPath(childPath);
                             List<ServiceNode> serviceNodes = new ArrayList<>(grandChildren.size());
                             for (String grandChild : grandChildren) {
                                 LOG.info("Instance of {} : {} ", child, grandChild);
-                                String nodePath = ZKPaths.makePath(child, grandChild);
+                                String nodePath = ZKPaths.makePath(DEFAULT_SERVICES_TOP_PATH, child, grandChild);
                                 String url = new String(getZookeeperClient().getData().forPath(nodePath), "UTF-8");
                                 Stat stat = getZookeeperClient().checkExists().forPath(nodePath);
                                 serviceNodes.add(ServiceNode.builder().name(grandChild)
@@ -82,7 +83,7 @@ public class ZookeeperServiceMonitor extends ZookeeperRegistryClient implements 
 
     protected List<ServiceGroup> allServicesFromCache() throws Exception {
         List<ServiceGroup> allServices = null;
-        Map<String, ChildData> children = nameSpaceTreeCache.getCurrentChildren("/");
+        Map<String, ChildData> children = nameSpaceTreeCache.getCurrentChildren(DEFAULT_SERVICES_TOP_PATH);
         if (children != null && !children.isEmpty()) {
             LOG.info("All Services : {} ", children.keySet().toString());
             allServices = new ArrayList<>(children.size());

@@ -31,6 +31,10 @@ public abstract class ZookeeperRegistryClient {
 
     protected static final String DEFAULT_NAMESPACE = "services_registry";
 
+    protected static final String DEFAULT_SERVICES_TOP_PATH = "/services";
+    protected static final String DEFAULT_CONSUMERS_TOP_PATH = "/consumers";
+    protected static final String DEFAULT_HISTORY_TOP_PATH = "/history";
+
     protected ZookeeperRegistryClient(String registryAddress) {
         this(registryAddress, null);
     }

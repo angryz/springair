@@ -31,7 +31,6 @@ public class AutoHttpInvokerProxyFactoryBean extends HttpInvokerProxyFactoryBean
 
     @Override
     public String getServiceUrl() {
-        LOG.info(" ---------- call getServiceUrl() ---------- ");
         if (!RemoteServiceAddressHolder.isExists(serviceName)) {
             synchronized (AutoHttpInvokerProxyFactoryBean.class) {
                 if (!RemoteServiceAddressHolder.isExists(serviceName)) {

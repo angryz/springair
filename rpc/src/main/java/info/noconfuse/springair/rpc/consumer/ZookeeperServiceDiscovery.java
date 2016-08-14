@@ -3,6 +3,7 @@ package info.noconfuse.springair.rpc.consumer;
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
+import org.apache.curator.utils.ZKPaths;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,15 +39,16 @@ public class ZookeeperServiceDiscovery extends ZookeeperRegistryClient implement
 
     @Override
     public String getServiceAddress(String serviceName) throws Exception {
+        String servicePath = ZKPaths.makePath(DEFAULT_SERVICES_TOP_PATH, serviceName);
         PathChildrenCache serviceNodeCache = caches.get(serviceName);
         if (serviceNodeCache == null) {
             // check serviceName exists
-            if (getZookeeperClient().checkExists().forPath(serviceName) == null)
+            if (getZookeeperClient().checkExists().forPath(servicePath) == null)
                 throw new NoSuchElementException("No service named as '" + serviceName + "' registered");
             // cache serviceName node, and listen for changing
-            serviceNodeCache = new PathChildrenCache(getZookeeperClient(), serviceName, true);
+            serviceNodeCache = new PathChildrenCache(getZookeeperClient(), servicePath, true);
             serviceNodeCache.start();
-            serviceNodeCache.getListenable().addListener(new ZkServiceNodeCacheListener(serviceName, serviceNodeCache));
+            serviceNodeCache.getListenable().addListener(new ZkServiceNodeCacheListener(servicePath, serviceNodeCache));
             serviceNodeCache.rebuild();
             caches.put(serviceName, serviceNodeCache);
         }
@@ -54,8 +56,9 @@ public class ZookeeperServiceDiscovery extends ZookeeperRegistryClient implement
         List<ChildData> children = serviceNodeCache.getCurrentData();
         int choice = new Random().nextInt(children.size());
         String url = new String(children.get(choice).getData(), "UTF-8");
-        LOG.info("Got service url : {}", url);
+        LOG.info("Got address of '{}' : {}", serviceName, url);
         RemoteServiceAddressHolder.setAddress(serviceName, url);
+        // TODO register consumer at registry asynchronizely
         return url;
     }
 }

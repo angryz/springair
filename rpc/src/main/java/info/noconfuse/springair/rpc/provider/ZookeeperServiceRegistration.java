@@ -37,7 +37,8 @@ public class ZookeeperServiceRegistration extends ZookeeperRegistryClient implem
         String url = makeServiceUrl(serviceName);
         // create ephemral node for service instance
         String serviceInstName = hostName + "_" + port;
-        createEphemeralNode(ZKPaths.makePath(serviceName, serviceInstName), url.getBytes("UTF-8"));
+        createEphemeralNode(ZKPaths.makePath(DEFAULT_SERVICES_TOP_PATH, serviceName, serviceInstName),
+                url.getBytes("UTF-8"));
         LOG.info("Registered service:{} to zookeeper.", serviceName);
     }
 
