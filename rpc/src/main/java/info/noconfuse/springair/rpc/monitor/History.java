@@ -1,12 +1,17 @@
 package info.noconfuse.springair.rpc.monitor;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Date;
 
 /**
  * @author Zheng Zhipeng
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class History {
 
+    @JsonFormat(pattern = "yyyy-MM-dd_HH:mm:ss.SSS")
     private Date time;
     private String serviceName;
     private String serviceInstanceName;
