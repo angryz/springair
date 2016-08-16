@@ -4,6 +4,26 @@
 <head>
     <meta charset="UTF-8"/>
     <title>History</title>
+    <style type="text/css">
+        table {
+            border: 1px solid;
+            border-collapse: collapse;
+        }
+
+        tr.OFFLINE {
+            background-color: #eee8dd;
+        }
+
+        th {
+            font-weight: bold;
+            background-color: #dcdcdc;
+        }
+
+        th, td {
+            border: 1px solid;
+            padding: 2px 20px;
+        }
+    </style>
 </head>
 <body>
 <table>
@@ -13,11 +33,13 @@
         <th>Service Instance</th>
         <th>Action</th>
     </tr>
-    <tr>
-        <td>2016-08-01 12:13:14</td>
-        <td>SomeService</td>
-        <td>AnyInstance</td>
-        <td>Online/Offline</td>
+    <tr th:each="history : ${histories}" th:class="${history.action}">
+        <td th:text="${#dates.format(history.time, 'yyyy/MM/dd HH:mm:ss')}">2016-08-01
+            12:13:14
+        </td>
+        <td th:text="${history.serviceName}">SomeService</td>
+        <td th:text="${history.serviceInstanceName}">AnyInstance</td>
+        <td th:text="${history.action}">Online/Offline</td>
     </tr>
 </table>
 </body>

@@ -43,12 +43,16 @@ public class MonitorController {
     @Autowired
     private ServiceMonitor serviceMonitor;
 
+    @Autowired
+    private HistoryRepository historyRepository;
+
     @RequestMapping("/monitor")
     public String monitor(Model model) {
         List<ServiceGroup> services = null;
         try {
             services = serviceMonitor.allServices();
         } catch (Exception e) {
+            // TODO show error on view
             e.printStackTrace();
         }
         model.addAttribute("services", services);
@@ -58,6 +62,14 @@ public class MonitorController {
 
     @RequestMapping("/history")
     public String history(Model model) {
+        List<History> histories = null;
+        try {
+            histories = historyRepository.findAll();
+        } catch (Exception e) {
+            // TODO show error on view
+            e.printStackTrace();
+        }
+        model.addAttribute("histories", histories);
 
         return "history";
     }
