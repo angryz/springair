@@ -39,4 +39,9 @@ public class MonitorConfig {
     ServiceMonitor serviceMonitor() {
         return new ZookeeperServiceMonitor("127.0.0.1:2181");
     }
+
+    @Bean
+    HistoryRepository historyRepository() {
+        return new ZookeeperHistoryRepository("127.0.0.1:2181");
+    }
 }

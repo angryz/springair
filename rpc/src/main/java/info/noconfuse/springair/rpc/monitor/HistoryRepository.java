@@ -24,6 +24,8 @@
 
 package info.noconfuse.springair.rpc.monitor;
 
+import java.util.List;
+
 /**
  * Service History Repository Interface.
  *
@@ -31,8 +33,10 @@ package info.noconfuse.springair.rpc.monitor;
  */
 public interface HistoryRepository {
 
-    void save(History history);
+    void save(History history) throws Exception;
 
-    History findAll();
+    List<History> findAll() throws Exception;
+
+    List<History> findAll(String serviceName) throws Exception;
 
 }

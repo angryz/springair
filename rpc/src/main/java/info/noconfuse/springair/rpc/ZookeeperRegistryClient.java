@@ -53,11 +53,11 @@ public abstract class ZookeeperRegistryClient {
 
     private CuratorFramework zookeeperClient;
 
-    protected static final String DEFAULT_NAMESPACE = "services_registry";
+    public static final String DEFAULT_NAMESPACE = "services_registry";
 
-    protected static final String DEFAULT_SERVICES_TOP_PATH = "/services";
-    protected static final String DEFAULT_CONSUMERS_TOP_PATH = "/consumers";
-    protected static final String DEFAULT_HISTORY_TOP_PATH = "/history";
+    public static final String DEFAULT_SERVICES_TOP_PATH = "/services";
+    public static final String DEFAULT_CONSUMERS_TOP_PATH = "/consumers";
+    public static final String DEFAULT_HISTORY_TOP_PATH = "/history";
 
     protected ZookeeperRegistryClient(String registryAddress) {
         this(registryAddress, null);
@@ -119,7 +119,7 @@ public abstract class ZookeeperRegistryClient {
         return nameSpace;
     }
 
-    protected CuratorFramework getZookeeperClient() {
+    public CuratorFramework getZookeeperClient() {
         return zookeeperClient;
     }
 }

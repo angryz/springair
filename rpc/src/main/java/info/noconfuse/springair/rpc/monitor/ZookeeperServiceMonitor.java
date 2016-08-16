@@ -36,8 +36,8 @@ import org.apache.curator.utils.ZKPaths;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,12 +46,15 @@ import java.util.concurrent.ConcurrentMap;
 
 /**
  * Service Monitor implementation with zookeeper.
- *
+ * <p>
  * Created by zzp on 8/11/16.
  */
 public class ZookeeperServiceMonitor extends ZookeeperRegistryClient implements ServiceMonitor {
 
     private static final Logger LOG = LoggerFactory.getLogger(ZookeeperServiceMonitor.class);
+
+    @Autowired
+    HistoryRepository historyRepository;
 
     private ConcurrentMap<String, TreeCache> caches;
     private TreeCache nameSpaceTreeCache;
@@ -72,12 +75,7 @@ public class ZookeeperServiceMonitor extends ZookeeperRegistryClient implements 
                 if (nameSpaceTreeCache == null) {
                     nameSpaceTreeCache = TreeCache.newBuilder(getZookeeperClient(), "/").setCacheData(true).build();
                     nameSpaceTreeCache.start();
-                    nameSpaceTreeCache.getListenable().addListener(new TreeCacheListener() {
-                        @Override
-                        public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
-                            LOG.info("EVENT {}", event.toString());
-                        }
-                    });
+                    nameSpaceTreeCache.getListenable().addListener(new TreeNodeListener());
                     List<String> children = getZookeeperClient().getChildren().forPath(DEFAULT_SERVICES_TOP_PATH);
                     allServices = new ArrayList<>(children.size());
                     if (children != null && !children.isEmpty()) {
@@ -128,4 +126,40 @@ public class ZookeeperServiceMonitor extends ZookeeperRegistryClient implements 
         }
         return allServices;
     }
+
+    private class TreeNodeListener implements TreeCacheListener {
+
+        @Override
+        public void childEvent(CuratorFramework client, TreeCacheEvent event) throws Exception {
+            LOG.info("EVENT {}", event.toString());
+            String path = event.getData() == null ? null : event.getData().getPath();
+            String[] nodes = new String[0];
+            if (path != null) {
+                nodes = path.split("/");
+            }
+            if (nodes.length == 4 && ("/" + nodes[1]).equals(DEFAULT_SERVICES_TOP_PATH)) {
+                switch (event.getType()) {
+                    case NODE_ADDED:
+                        LOG.info("Service instance {} online.", nodes[3]);
+                        History onlineHistory = new History();
+                        onlineHistory.setAction(History.Action.ONLINE);
+                        onlineHistory.setTime(new Date(event.getData().getStat().getCtime()));
+                        onlineHistory.setServiceName(nodes[2]);
+                        onlineHistory.setServiceInstanceName(nodes[3]);
+                        historyRepository.save(onlineHistory);
+                        break;
+                    case NODE_REMOVED:
+                        LOG.info("Service instance {} offline.", nodes[3]);
+                        History offlineHistory = new History();
+                        offlineHistory.setAction(History.Action.OFFLINE);
+                        offlineHistory.setTime(new Date());
+                        offlineHistory.setServiceName(nodes[2]);
+                        offlineHistory.setServiceInstanceName(nodes[3]);
+                        historyRepository.save(offlineHistory);
+                        break;
+                }
+            }
+        }
+    }
+
 }

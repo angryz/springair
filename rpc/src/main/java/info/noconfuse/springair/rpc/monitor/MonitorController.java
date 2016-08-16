@@ -59,6 +59,6 @@ public class MonitorController {
     @RequestMapping("/history")
     public String history(Model model) {
 
-        return "model";
+        return "history";
     }
 }
