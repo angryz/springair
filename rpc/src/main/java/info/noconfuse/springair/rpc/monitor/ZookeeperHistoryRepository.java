@@ -26,7 +26,6 @@ package info.noconfuse.springair.rpc.monitor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
 import org.apache.curator.utils.ZKPaths;
-import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

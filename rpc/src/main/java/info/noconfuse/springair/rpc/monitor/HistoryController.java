@@ -24,7 +24,6 @@
 
 package info.noconfuse.springair.rpc.monitor;
 
-import info.noconfuse.springair.rpc.ServiceGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,28 +32,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 /**
- * Controller of MVC.
+ * Service history view controller.
  *
  * @author Zheng Zhipeng
  */
 @Controller
-public class MonitorController {
+public class HistoryController {
 
     @Autowired
-    private ServiceMonitor serviceMonitor;
+    private HistoryRepository historyRepository;
 
-    @RequestMapping("/monitor")
-    public String monitor(Model model) {
-        List<ServiceGroup> services = null;
+    @RequestMapping("/history")
+    public String history(Model model) {
+        List<History> histories = null;
         try {
-            services = serviceMonitor.allServices();
+            histories = historyRepository.findAll();
         } catch (Exception e) {
             // TODO show error on view
             e.printStackTrace();
         }
-        model.addAttribute("services", services);
+        model.addAttribute("histories", histories);
 
-        return "monitor";
+        return "history";
     }
-
 }
