@@ -30,6 +30,7 @@ import org.springframework.stereotype.Repository;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -67,6 +68,12 @@ public class ZookeeperHistoryRepository extends ZookeeperRegistryClient implemen
         for (String node : serviceNodes) {
             historyList.addAll(findAll(node));
         }
+        historyList.sort(new Comparator<History>() {
+            @Override
+            public int compare(History o1, History o2) {
+                return o2.getTime().compareTo(o1.getTime());
+            }
+        });
         return historyList;
     }
 
