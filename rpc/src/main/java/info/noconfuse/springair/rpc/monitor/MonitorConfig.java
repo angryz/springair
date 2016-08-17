@@ -24,6 +24,7 @@
 
 package info.noconfuse.springair.rpc.monitor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,13 +36,25 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MonitorConfig {
 
+    @Value("${registry.connection}")
+    private String connectString;
+
+    @Value("${registry.namespace:}")
+    private String nameSpace;
+
     @Bean
     ServiceMonitor serviceMonitor() {
-        return new ZookeeperServiceMonitor("127.0.0.1:2181");
+        if (nameSpace != null && nameSpace.trim().length() > 0)
+            return new ZookeeperServiceMonitor(connectString, nameSpace);
+        else
+            return new ZookeeperServiceMonitor(connectString);
     }
 
     @Bean
     HistoryRepository historyRepository() {
-        return new ZookeeperHistoryRepository("127.0.0.1:2181");
+        if (nameSpace != null && nameSpace.trim().length() > 0)
+            return new ZookeeperHistoryRepository(connectString, nameSpace);
+        else
+            return new ZookeeperHistoryRepository(connectString);
     }
 }
