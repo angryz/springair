@@ -39,4 +39,5 @@ public interface HistoryRepository {
 
     List<History> findAll(String serviceName) throws Exception;
 
+    void remove(History history) throws Exception;
 }

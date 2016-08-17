@@ -26,6 +26,7 @@ package info.noconfuse.springair.rpc.monitor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
 import org.apache.curator.utils.ZKPaths;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,6 +34,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import static info.noconfuse.springair.rpc.monitor.ScheduledHistoryCleaner
+        .MAX_HISTORY_LIMIT_PER_SERV;
 
 /**
  * Persistence history into zookeeper.
@@ -42,6 +46,9 @@ import java.util.concurrent.ConcurrentMap;
 public class ZookeeperHistoryRepository extends ZookeeperRegistryClient implements HistoryRepository {
 
     private ConcurrentMap<String, List<String>> historyCache = new ConcurrentHashMap<>();
+
+    @Autowired
+    ScheduledHistoryCleaner scheduledHistoryCleaner;
 
     protected ZookeeperHistoryRepository(String registryAddress) {
         super(registryAddress);
@@ -53,9 +60,8 @@ public class ZookeeperHistoryRepository extends ZookeeperRegistryClient implemen
 
     @Override
     public void save(History history) throws Exception {
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
         String path = ZKPaths.makePath(DEFAULT_HISTORY_TOP_PATH, history.getServiceName(),
-                format.format(history.getTime()));
+                makeHistoryNodeName(history));
         if (getZookeeperClient().checkExists().forPath(path) == null) {
             ObjectMapper mapper = new ObjectMapper();
             byte[] data = mapper.writeValueAsBytes(history);
@@ -90,19 +96,40 @@ public class ZookeeperHistoryRepository extends ZookeeperRegistryClient implemen
                 return o2.compareTo(o1);
             }
         });
+        List<String> abandoned = serviceHistoryNode.size() > MAX_HISTORY_LIMIT_PER_SERV ?
+                serviceHistoryNode.subList(MAX_HISTORY_LIMIT_PER_SERV - 1,
+                        serviceHistoryNode.size() - 1)
+                : new ArrayList<>(0);
         //List<String> cachedServiceHistory = getCachedServiceHistory(serviceName);
         List<History> historyList = new ArrayList<>(serviceHistoryNode.size());
         ObjectMapper mapper = new ObjectMapper();
         for (String node : serviceHistoryNode) {
             String nodePath = ZKPaths.makePath(path, node);
             byte[] data = getZookeeperClient().getData().forPath(nodePath);
-            historyList.add(mapper.readValue(data, History.class));
+            History history = mapper.readValue(data, History.class);
+            historyList.add(history);
+            // abandon extra history nodes
+            if (!abandoned.isEmpty() && abandoned.contains(node))
+                scheduledHistoryCleaner.abandon(history);
+
         }
         return historyList;
+    }
+
+    @Override
+    public void remove(History history) throws Exception {
+        String path = ZKPaths.makePath(DEFAULT_HISTORY_TOP_PATH, history.getServiceName(),
+                makeHistoryNodeName(history));
+        getZookeeperClient().delete().deletingChildrenIfNeeded().inBackground().forPath(path);
     }
 
     protected List<String> getCachedServiceHistory(String serviceName) {
         List<String> cachedServiceHistory = historyCache.get(serviceName);
         return cachedServiceHistory == null ? new ArrayList<>(50) : cachedServiceHistory;
+    }
+
+    private String makeHistoryNodeName(History history) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        return format.format(history.getTime());
     }
 }

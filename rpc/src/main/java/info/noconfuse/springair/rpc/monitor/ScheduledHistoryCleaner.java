@@ -24,8 +24,14 @@
 
 package info.noconfuse.springair.rpc.monitor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Scheduled history data cleaning task.
@@ -35,11 +41,39 @@ import org.springframework.stereotype.Component;
 @Component
 public class ScheduledHistoryCleaner {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ScheduledHistoryCleaner.class);
+
+    protected static final int MAX_HISTORY_LIMIT_PER_SERV = 5;
+
+    private Queue<History> abandonedNodes;
+
+    @Autowired
+    private HistoryRepository historyRepository;
+
     /**
      * Delay 1 hour between each cleanning task.
      */
-    @Scheduled(fixedDelay = 60 * 60 * 1000)
+    @Scheduled(fixedDelay = 5 * 1000)
     public void clean() {
+        if (abandonedNodes != null && !abandonedNodes.isEmpty()) {
+            long start = System.currentTimeMillis();
+            LOG.info("Start history cleaning ...");
+            for (int i = 0; i < abandonedNodes.size(); i++) {
+                try {
+                    historyRepository.remove(abandonedNodes.poll());
+                } catch (Exception e) {
+                }
+            }
+            LOG.info("Finish history cleaning, cost {}ms", System.currentTimeMillis() - start);
+        }
+    }
 
+    /**
+     * Add abandoned nodes into queue, use {@code offer()} and ignore failure.
+     */
+    public void abandon(History history) {
+        if (abandonedNodes == null)
+            abandonedNodes = new LinkedBlockingDeque<>(50);
+        abandonedNodes.offer(history);
     }
 }
