@@ -31,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Persistence history into zookeeper.
@@ -38,6 +40,8 @@ import java.util.List;
  * @author Zheng Zhipeng
  */
 public class ZookeeperHistoryRepository extends ZookeeperRegistryClient implements HistoryRepository {
+
+    private ConcurrentMap<String, List<String>> historyCache = new ConcurrentHashMap<>();
 
     protected ZookeeperHistoryRepository(String registryAddress) {
         super(registryAddress);
@@ -80,6 +84,13 @@ public class ZookeeperHistoryRepository extends ZookeeperRegistryClient implemen
     public List<History> findAll(String serviceName) throws Exception {
         String path = ZKPaths.makePath(DEFAULT_HISTORY_TOP_PATH, serviceName);
         List<String> serviceHistoryNode = getZookeeperClient().getChildren().forPath(path);
+        serviceHistoryNode.sort(new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o2.compareTo(o1);
+            }
+        });
+        //List<String> cachedServiceHistory = getCachedServiceHistory(serviceName);
         List<History> historyList = new ArrayList<>(serviceHistoryNode.size());
         ObjectMapper mapper = new ObjectMapper();
         for (String node : serviceHistoryNode) {
@@ -90,4 +101,8 @@ public class ZookeeperHistoryRepository extends ZookeeperRegistryClient implemen
         return historyList;
     }
 
+    protected List<String> getCachedServiceHistory(String serviceName) {
+        List<String> cachedServiceHistory = historyCache.get(serviceName);
+        return cachedServiceHistory == null ? new ArrayList<>(50) : cachedServiceHistory;
+    }
 }
