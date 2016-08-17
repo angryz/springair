@@ -43,7 +43,7 @@ public class ScheduledHistoryCleaner {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScheduledHistoryCleaner.class);
 
-    protected static final int MAX_HISTORY_LIMIT_PER_SERV = 5;
+    protected static final int MAX_HISTORY_LIMIT_PER_SERV = 50;
 
     private Queue<History> abandonedNodes;
 
@@ -53,7 +53,7 @@ public class ScheduledHistoryCleaner {
     /**
      * Delay 1 hour between each cleanning task.
      */
-    @Scheduled(fixedDelay = 5 * 1000)
+    @Scheduled(fixedDelay = 60 * 60 * 1000)
     public void clean() {
         if (abandonedNodes != null && !abandonedNodes.isEmpty()) {
             long start = System.currentTimeMillis();
