@@ -24,10 +24,12 @@
 
 package info.noconfuse.springair.rpc.consumer;
 
+import info.noconfuse.springair.rpc.LocalHostUtils;
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.PathChildrenCache;
 import org.apache.curator.utils.ZKPaths;
+import org.apache.zookeeper.CreateMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +74,8 @@ public class ZookeeperServiceDiscovery extends ZookeeperRegistryClient implement
             // cache serviceName node, and listen for changing
             serviceNodeCache = new PathChildrenCache(getZookeeperClient(), servicePath, true);
             serviceNodeCache.start();
-            serviceNodeCache.getListenable().addListener(new ZkServiceNodeCacheListener(servicePath, serviceNodeCache));
+            serviceNodeCache.getListenable().addListener(new ZkServiceNodeCacheListener(serviceName,
+                    serviceNodeCache));
             serviceNodeCache.rebuild();
             caches.put(serviceName, serviceNodeCache);
         }
@@ -83,6 +86,16 @@ public class ZookeeperServiceDiscovery extends ZookeeperRegistryClient implement
         LOG.info("Got address of '{}' : {}", serviceName, url);
         RemoteServiceAddressHolder.setAddress(serviceName, url);
         // TODO register consumer at registry asynchronizely
+        String consumerID = LocalHostUtils.ip() + "_" + this.hashCode();
+        String consumerPath = ZKPaths.makePath(DEFAULT_CONSUMERS_TOP_PATH, serviceName,
+                consumerID);
+        if (getZookeeperClient().checkExists().forPath(consumerPath) == null)
+            getZookeeperClient().create().creatingParentsIfNeeded()
+                    .withMode(CreateMode.EPHEMERAL).inBackground()
+                    .forPath(consumerPath, url.getBytes("UTF-8"));
+        else
+            getZookeeperClient().setData().inBackground().forPath(consumerPath, url.getBytes
+                    ("UTF-8"));
         return url;
     }
 }
