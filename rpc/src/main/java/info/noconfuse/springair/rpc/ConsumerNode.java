@@ -22,19 +22,51 @@
  * SOFTWARE.
  */
 
-package info.noconfuse.springair.rpc.monitor.consumer;
+package info.noconfuse.springair.rpc;
 
-import info.noconfuse.springair.rpc.ConsumerNode;
-
-import java.util.List;
+import java.util.Date;
 
 /**
- * Monitor all consumers in registry.
+ * Consumer node model.
  *
  * @author Zheng Zhipeng
  */
-public interface ConsumerMonitor {
+public class ConsumerNode {
 
-    List<ConsumerNode> allConsumers(String serviceName) throws Exception;
+    private String name;
+    private String serviceName;
+    private String serviceAddress;
+    private Date ctime;
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getServiceAddress() {
+        return serviceAddress;
+    }
+
+    public void setServiceAddress(String serviceAddress) {
+        this.serviceAddress = serviceAddress;
+    }
+
+    public Date getCtime() {
+        return ctime;
+    }
+
+    public void setCtime(Date ctime) {
+        this.ctime = ctime;
+    }
 }
