@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
-package info.noconfuse.springair.rpc.monitor;
+package info.noconfuse.springair.rpc.monitor.service;
 
 import info.noconfuse.springair.rpc.ServiceGroup;
 import info.noconfuse.springair.rpc.ServiceNode;
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
+import info.noconfuse.springair.rpc.monitor.history.History;
+import info.noconfuse.springair.rpc.monitor.history.HistoryRepository;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.ChildData;
 import org.apache.curator.framework.recipes.cache.TreeCache;
@@ -59,11 +61,11 @@ public class ZookeeperServiceMonitor extends ZookeeperRegistryClient implements 
     private ConcurrentMap<String, TreeCache> caches;
     private TreeCache nameSpaceTreeCache;
 
-    protected ZookeeperServiceMonitor(String registryAddress) {
+    public ZookeeperServiceMonitor(String registryAddress) {
         this(registryAddress, null);
     }
 
-    protected ZookeeperServiceMonitor(String registryAddress, String nameSpace) {
+    public ZookeeperServiceMonitor(String registryAddress, String nameSpace) {
         super(registryAddress, nameSpace);
     }
 

@@ -22,37 +22,22 @@
  * SOFTWARE.
  */
 
-package info.noconfuse.springair.rpc.monitor;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+package info.noconfuse.springair.rpc.monitor.history;
 
 import java.util.List;
 
 /**
- * Service history view controller.
+ * Service History Repository Interface.
  *
  * @author Zheng Zhipeng
  */
-@Controller
-public class HistoryController {
+public interface HistoryRepository {
 
-    @Autowired
-    private HistoryRepository historyRepository;
+    void save(History history) throws Exception;
 
-    @RequestMapping("/history")
-    public String history(Model model) {
-        List<History> histories = null;
-        try {
-            histories = historyRepository.findAll();
-        } catch (Exception e) {
-            // TODO show error on view
-            e.printStackTrace();
-        }
-        model.addAttribute("histories", histories);
+    List<History> findAll() throws Exception;
 
-        return "history";
-    }
+    List<History> findAll(String serviceName) throws Exception;
+
+    void remove(History history) throws Exception;
 }

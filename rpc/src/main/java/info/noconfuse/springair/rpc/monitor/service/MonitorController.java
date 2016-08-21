@@ -22,60 +22,39 @@
  * SOFTWARE.
  */
 
-package info.noconfuse.springair.rpc.monitor;
+package info.noconfuse.springair.rpc.monitor.service;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import info.noconfuse.springair.rpc.ServiceGroup;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Date;
+import java.util.List;
 
 /**
- * Service History model.
+ * Controller of MVC.
  *
  * @author Zheng Zhipeng
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class History {
+@Controller
+public class MonitorController {
 
-    @JsonFormat(pattern = "yyyy-MM-dd_HH:mm:ss.SSS")
-    private Date time;
-    private String serviceName;
-    private String serviceInstanceName;
-    private Action action;
+    @Autowired
+    private ServiceMonitor serviceMonitor;
 
-    public Date getTime() {
-        return time;
+    @RequestMapping("/monitor")
+    public String monitor(Model model) {
+        List<ServiceGroup> services = null;
+        try {
+            services = serviceMonitor.allServices();
+        } catch (Exception e) {
+            // TODO show error on view
+            e.printStackTrace();
+        }
+        model.addAttribute("services", services);
+
+        return "monitor";
     }
 
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    public void setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-    }
-
-    public String getServiceInstanceName() {
-        return serviceInstanceName;
-    }
-
-    public void setServiceInstanceName(String serviceInstanceName) {
-        this.serviceInstanceName = serviceInstanceName;
-    }
-
-    public Action getAction() {
-        return action;
-    }
-
-    public void setAction(Action action) {
-        this.action = action;
-    }
-
-    public enum Action {
-        ONLINE, OFFLINE;
-    }
 }

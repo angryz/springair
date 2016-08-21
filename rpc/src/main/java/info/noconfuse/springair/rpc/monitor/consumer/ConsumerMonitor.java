@@ -22,22 +22,12 @@
  * SOFTWARE.
  */
 
-package info.noconfuse.springair.rpc.monitor;
-
-import java.util.List;
+package info.noconfuse.springair.rpc.monitor.consumer;
 
 /**
- * Service History Repository Interface.
+ * Monitor all consumers in registry.
  *
  * @author Zheng Zhipeng
  */
-public interface HistoryRepository {
-
-    void save(History history) throws Exception;
-
-    List<History> findAll() throws Exception;
-
-    List<History> findAll(String serviceName) throws Exception;
-
-    void remove(History history) throws Exception;
+public interface ConsumerMonitor {
 }

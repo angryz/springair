@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package info.noconfuse.springair.rpc.monitor;
+package info.noconfuse.springair.rpc.monitor.history;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

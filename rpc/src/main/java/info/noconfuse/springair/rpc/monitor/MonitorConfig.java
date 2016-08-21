@@ -24,6 +24,10 @@
 
 package info.noconfuse.springair.rpc.monitor;
 
+import info.noconfuse.springair.rpc.monitor.history.HistoryRepository;
+import info.noconfuse.springair.rpc.monitor.history.ZookeeperHistoryRepository;
+import info.noconfuse.springair.rpc.monitor.service.ServiceMonitor;
+import info.noconfuse.springair.rpc.monitor.service.ZookeeperServiceMonitor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -59,11 +59,11 @@ public abstract class ZookeeperRegistryClient {
     public static final String DEFAULT_CONSUMERS_TOP_PATH = "/consumers";
     public static final String DEFAULT_HISTORY_TOP_PATH = "/history";
 
-    protected ZookeeperRegistryClient(String registryAddress) {
+    public ZookeeperRegistryClient(String registryAddress) {
         this(registryAddress, null);
     }
 
-    protected ZookeeperRegistryClient(String registryAddress, String nameSpace) {
+    public ZookeeperRegistryClient(String registryAddress, String nameSpace) {
         Assert.notNull(registryAddress, "Missing zookeeper server address.");
         this.registryAddress = registryAddress;
         if (nameSpace == null) {

@@ -21,7 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package info.noconfuse.springair.rpc.monitor;
+
+package info.noconfuse.springair.rpc.monitor.history;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import info.noconfuse.springair.rpc.ZookeeperRegistryClient;
@@ -35,7 +36,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import static info.noconfuse.springair.rpc.monitor.ScheduledHistoryCleaner
+import static info.noconfuse.springair.rpc.monitor.history.ScheduledHistoryCleaner
         .MAX_HISTORY_LIMIT_PER_SERV;
 
 /**
@@ -50,11 +51,11 @@ public class ZookeeperHistoryRepository extends ZookeeperRegistryClient implemen
     @Autowired
     ScheduledHistoryCleaner scheduledHistoryCleaner;
 
-    protected ZookeeperHistoryRepository(String registryAddress) {
+    public ZookeeperHistoryRepository(String registryAddress) {
         super(registryAddress);
     }
 
-    protected ZookeeperHistoryRepository(String registryAddress, String nameSpace) {
+    public ZookeeperHistoryRepository(String registryAddress, String nameSpace) {
         super(registryAddress, nameSpace);
     }
 
